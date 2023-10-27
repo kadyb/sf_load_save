@@ -253,3 +253,59 @@ url = "https://raw.githubusercontent.com/OSGeo/gdal/master/autotest/ogr/data/shp
 f = paste0("/vsizip/", "/vsicurl/", url)
 read_sf(f)
 ```
+
+## SQL preselection
+
+We can use [SQL queries](https://en.wikipedia.org/wiki/SQL) to pre-filter
+features, so only selected objects / attributes will be loaded. This allows us
+to limit the size of the object in memory and speed up the operation time.
+Moreover, we can also make spatial selection, i.e. limit the loading of data
+only to a selected area.
+
+### Columns filtering
+
+The `query` argument in the `read_sf()` function is used to pass SQL queries.
+Let's go back to `countries` dataset and load only the column with the names of
+countries (`NAME_LONG`).
+
+```{r}
+sql = "SELECT NAME_LONG FROM countries"
+f = "data/countries/countries.shp"
+read_sf(f, query = sql)
+```
+
+### Rows filtering
+
+We can also select rows using a condition, e.g. population (`POP_EST`) greater
+than 25 million.
+
+```{r}
+sql = "SELECT * FROM countries WHERE POP_EST > 25000000"
+f = "data/countries/countries.shp"
+read_sf(f, query = sql) # 17 countries
+```
+
+### Spatial filtering
+
+Finally, to perform spatial filtering, we must first define the spatial extent
+/ bounding box (`st_bbox()` function) and specify its coordinate reference
+system (CRS). Then the bounding box needs to be converted into a polygon using
+the `st_as_sfc()` function and finally converted to a 
+[Well-Know Text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
+representation using `st_as_text()` function. Therefore, prepared text is passed
+to the `wkt_filter` argument. Follow the example below of loading rivers only
+in southern Africa:
+
+```{r}
+bbox = st_bbox(c(xmin = 10, xmax = 40, ymax = -35, ymin = -20),
+               crs = st_crs(4326))
+bbox = st_as_text(st_as_sfc(bbox))
+bbox
+```
+
+```{r}
+f = "data/rivers.gpkg"
+rivers_south = read_sf(f, wkt_filter = bbox)
+plot(st_geometry(rivers_south), axes = TRUE)
+```
+
