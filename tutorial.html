@@ -361,13 +361,18 @@ display: none;
 it in R, this tutorial is the answer to your questions. Below are
 presented some examples for the most popular formats using the <a href="https://r-spatial.github.io/sf/"><strong>sf</strong></a> package.
 We will use free vector layers from <a href="https://www.naturalearthdata.com/">Natural Earth</a> as a data
-source. For convenience, all necessary files are located in the GitHub
-repository:</p>
+source. For convenience, all necessary files are located in the <a href="https://github.com/kadyb/sf_load_save">GitHub repository</a>:</p>
 <ul>
 <li>countries.shp (and related files)</li>
 <li>rivers.gpkg</li>
 <li>cities.geojson</li>
 </ul>
+<p>We can download the mentioned data and interactive notebook (.Rmd)
+manually from the repository (“Code” button &gt; “Download ZIP”) or use
+the following script.</p>
+<pre class="r"><code>url = &quot;https://github.com/kadyb/sf_load_save/archive/refs/heads/main.zip&quot;
+download.file(url, &quot;sf_load_save.zip&quot;)
+unzip(&quot;sf_load_save.zip&quot;)</code></pre>
 <p>In the first step, we need to download the <strong>sf</strong>
 package using the <code>install.packages()</code> function, and then use
 the <code>library()</code> function to load it into the session.</p>
@@ -647,11 +652,14 @@ advanced ways.</p>
 <h2>Zipped shapefile (.shz)</h2>
 <p>As we noted earlier, a shapefile consists of several files, which can
 be cumbersome. Some solution is to use zipped shapefiles, which is de
-facto an archive. To create such a file, the extension “.shz” (or
-“.shp.zip”) and the <code>ESRI Shapefile</code> driver are required.
+facto an archive. To create such a file, the extension .shz (or
+.shp.zip) and the <code>ESRI Shapefile</code> driver are required.
 Loading is done in a standard way by specifying the path to the “.shz”
 file.</p>
 <pre class="r"><code>write_sf(capitals, &quot;data/capitals.shz&quot;, driver = &quot;ESRI Shapefile&quot;)</code></pre>
+<pre><code>## Warning in CPL_write_ogr(obj, dsn, layer, driver,
+## as.character(dataset_options), : GDAL Error 6: .shz does not support layer
+## deletion</code></pre>
 <p>Hooray, only one file on the disk!</p>
 </div>
 <div id="virtual-file-systems" class="section level2">
