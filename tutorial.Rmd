@@ -2,7 +2,10 @@
 title: "How to load and save vector data in R"
 author: "Krzysztof Dyba"
 date: "26 October 2023"
-output: html_document
+output: 
+  html_document:
+    toc: yes
+    toc_float: true
 ---
 
 If you have spatial vector data and are wondering how to load / save it in R,
