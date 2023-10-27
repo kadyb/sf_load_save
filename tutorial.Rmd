@@ -93,7 +93,7 @@ printed.
 After loading the data, it is a good idea to present it on a map. A simple
 `plot()` function can be used for this purpose. The `countries` object has many
 fields (attributes), but to start with we only need geometry. It can be obtained
-by using `st_geometry()` function.
+by using the `st_geometry()` function.
 
 ```{r}
 plot(st_geometry(countries))
@@ -103,7 +103,7 @@ plot(st_geometry(countries))
 
 The next dataset is rivers (linear geometry) saved in
 [GeoPackage format](https://www.geopackage.org/). It is loaded in exactly the
-same way as shapefile before. Note that this format can consist of multiple
+same way as the shapefile before. Note that this format can consist of multiple
 layers of different types. In this case, we must define which layer exactly we
 want to load using the `layer` argument (if you do not know the names of the
 layers, you can use the `st_layers()` function beforehand).
@@ -275,8 +275,8 @@ only to a selected area.
 ### Columns filtering
 
 The `query` argument in the `read_sf()` function is used to pass SQL queries.
-Let's go back to `countries` dataset and load only the column with the names of
-countries (`NAME_LONG`).
+Let's go back to the `countries` dataset and load only the column with the names
+of countries (`NAME_LONG`).
 
 ```{r}
 sql = "SELECT NAME_LONG FROM countries"
