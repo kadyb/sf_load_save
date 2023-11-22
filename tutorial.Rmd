@@ -225,8 +225,8 @@ formats can be found on the [GDAL website](https://gdal.org/drivers/vector/index
 
 For more information, see:
 
-1. [Reading, Writing and Converting Simple Features](https://r-spatial.github.io/sf/articles/sf2.html)
-2. [Spatial Data Science With Applications in R](https://r-spatial.org/book/07-Introsf.html)
+1. **sf** introductory vignette: [Reading, Writing and Converting Simple Features](https://r-spatial.github.io/sf/articles/sf2.html)
+2. Pebesma E. & Bivand R. (2023). Introduction to sf and stars. In: Spatial Data Science: With Applications in R. <https://r-spatial.org/book/07-Introsf.html>.
 
 # Supplement
 
