@@ -56,17 +56,19 @@ providing a path to the file. The file path can be defined in two ways in R
 and this is the most common source of problems (errors like: `Error: Cannot
 open "file.shp"; The file doesn't seem to exist.`).
 
-The first way, less problematic, is to provide an **absolute path**, i.e. we
+The first way (easier) is to provide an **absolute path**, i.e. we
 must provide the exact location where the file is located. For instance:
 
 ```
 path = "C:/Users/Krzysztof/Documents/file.shp"
 ```
 
-The second way is to specify a **relative path**. In this case, we specify the
-location of the file relative to the current working directory (or project).
-To find out where the working directory is, we can use the `getwd()` function,
-and to change it the `setwd()` function. For instance:
+However, this [is not](https://r4ds.hadley.nz/workflow-scripts#relative-and-absolute-paths)
+the recommended method, as it makes it impossible to locate files on different
+operating systems. The second way is to specify a **relative path**. In this
+case, we specify the location of the file relative to the current working
+directory (or project). To find out where the working directory is, we can
+use the `getwd()` function, and to change it the `setwd()` function. For instance:
 
 ```
 getwd()
@@ -108,11 +110,13 @@ The next dataset is rivers (linear geometry) saved in
 [GeoPackage format](https://www.geopackage.org/). It is loaded in exactly the
 same way as the shapefile before. Note that this format can consist of multiple
 layers of different types. In this case, we must define which layer exactly we
-want to load using the `layer` argument (if you do not know the names of the
-layers, you can use the `st_layers()` function beforehand).
+want to load. To check what layers are in the geopackage, use the `st_layers()`
+function, and then specify it using the `layer` argument in `read_sf()`.
+If the file only contains one layer, we don't need to do this.
 
 ```{r}
-rivers = read_sf("data/rivers.gpkg")
+st_layers("data/rivers.gpkg")
+rivers = read_sf("data/rivers.gpkg", layer = "rivers")
 ```
 
 We can also display metadata as in the previous example.
@@ -226,7 +230,8 @@ formats can be found on the [GDAL website](https://gdal.org/drivers/vector/index
 For more information, see:
 
 1. **sf** introductory vignette: [Reading, Writing and Converting Simple Features](https://r-spatial.github.io/sf/articles/sf2.html)
-2. Pebesma E. & Bivand R. (2023). Introduction to sf and stars. In: Spatial Data Science: With Applications in R. <https://r-spatial.org/book/07-Introsf.html>.
+2. Introduction to **sf** and **stars** in [Spatial Data Science: With Applications in R](https://r-spatial.org/book/07-Introsf.html)
+(Pebesma E. & Bivand R., 2023)
 
 # Supplement
 

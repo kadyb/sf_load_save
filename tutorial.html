@@ -1520,15 +1520,18 @@ data. It requires providing a path to the file. The file path can be
 defined in two ways in R and this is the most common source of problems
 (errors like:
 <code>Error: Cannot open &quot;file.shp&quot;; The file doesn&#39;t seem to exist.</code>).</p>
-<p>The first way, less problematic, is to provide an <strong>absolute
+<p>The first way (easier) is to provide an <strong>absolute
 path</strong>, i.e. we must provide the exact location where the file is
 located. For instance:</p>
 <pre><code>path = &quot;C:/Users/Krzysztof/Documents/file.shp&quot;</code></pre>
-<p>The second way is to specify a <strong>relative path</strong>. In
-this case, we specify the location of the file relative to the current
-working directory (or project). To find out where the working directory
-is, we can use the <code>getwd()</code> function, and to change it the
-<code>setwd()</code> function. For instance:</p>
+<p>However, this <a href="https://r4ds.hadley.nz/workflow-scripts#relative-and-absolute-paths">is
+not</a> the recommended method, as it makes it impossible to locate
+files on different operating systems. The second way is to specify a
+<strong>relative path</strong>. In this case, we specify the location of
+the file relative to the current working directory (or project). To find
+out where the working directory is, we can use the <code>getwd()</code>
+function, and to change it the <code>setwd()</code> function. For
+instance:</p>
 <pre><code>getwd()
 #&gt; &quot;C:/Users/Krzysztof/Documents&quot;
 path = &quot;file.shp&quot;</code></pre>
@@ -1580,10 +1583,17 @@ with we only need geometry. It can be obtained by using the
 <p>The next dataset is rivers (linear geometry) saved in <a href="https://www.geopackage.org/">GeoPackage format</a>. It is loaded
 in exactly the same way as the shapefile before. Note that this format
 can consist of multiple layers of different types. In this case, we must
-define which layer exactly we want to load using the <code>layer</code>
-argument (if you do not know the names of the layers, you can use the
-<code>st_layers()</code> function beforehand).</p>
-<pre class="r"><code>rivers = read_sf(&quot;data/rivers.gpkg&quot;)</code></pre>
+define which layer exactly we want to load. To check what layers are in
+the geopackage, use the <code>st_layers()</code> function, and then
+specify it using the <code>layer</code> argument in
+<code>read_sf()</code>. If the file only contains one layer, we don’t
+need to do this.</p>
+<pre class="r"><code>st_layers(&quot;data/rivers.gpkg&quot;)</code></pre>
+<pre><code>## Driver: GPKG 
+## Available layers:
+##   layer_name     geometry_type features fields crs_name
+## 1     rivers Multi Line String      228     38   WGS 84</code></pre>
+<pre class="r"><code>rivers = read_sf(&quot;data/rivers.gpkg&quot;, layer = &quot;rivers&quot;)</code></pre>
 <p>We can also display metadata as in the previous example.</p>
 <pre class="r"><code>rivers</code></pre>
 <pre><code>## Simple feature collection with 228 features and 38 fields
@@ -1766,10 +1776,10 @@ as well (you just need to change the extension).</p>
 formats can be found on the <a href="https://gdal.org/drivers/vector/index.html">GDAL website</a>.</p>
 <p>For more information, see:</p>
 <ol style="list-style-type: decimal">
-<li><a href="https://r-spatial.github.io/sf/articles/sf2.html">Reading,
-Writing and Converting Simple Features</a></li>
-<li><a href="https://r-spatial.org/book/07-Introsf.html">Spatial Data
-Science With Applications in R</a></li>
+<li><strong>sf</strong> introductory vignette: <a href="https://r-spatial.github.io/sf/articles/sf2.html">Reading, Writing
+and Converting Simple Features</a></li>
+<li>Introduction to <strong>sf</strong> and <strong>stars</strong> in <a href="https://r-spatial.org/book/07-Introsf.html">Spatial Data Science:
+With Applications in R</a> (Pebesma E. &amp; Bivand R., 2023)</li>
 </ol>
 </div>
 <div id="supplement" class="section level1">
@@ -1786,6 +1796,9 @@ facto an archive. To create such a file, the extension .shz (or
 Loading is done in a standard way by specifying the path to the “.shz”
 file.</p>
 <pre class="r"><code>write_sf(capitals, &quot;data/capitals.shz&quot;, driver = &quot;ESRI Shapefile&quot;)</code></pre>
+<pre><code>## Warning in CPL_write_ogr(obj, dsn, layer, driver,
+## as.character(dataset_options), : GDAL Error 6: .shz does not support layer
+## deletion</code></pre>
 <p>Hooray, only one file on the disk!</p>
 </div>
 <div id="virtual-file-systems" class="section level2">
